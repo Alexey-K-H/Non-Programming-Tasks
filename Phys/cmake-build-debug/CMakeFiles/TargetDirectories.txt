@@ -1,0 +1,3 @@
+C:/Users/Public/Documents/Clion_Progects/Phys/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Public/Documents/Clion_Progects/Phys/cmake-build-debug/CMakeFiles/Phys.dir
+C:/Users/Public/Documents/Clion_Progects/Phys/cmake-build-debug/CMakeFiles/edit_cache.dir
