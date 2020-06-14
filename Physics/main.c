@@ -38,73 +38,80 @@ double FindCoeffitient(double curr_E, int chetnost){
     return coeffitient;
 }
 
-void BuildGraph(double coeffitient, double curr_E, int chetnost, /*double b,*/ FILE *out){
-    //double x_values[51];
-    //double y_values[51];
+void BuildGraph(double coeffitient, double curr_E, int chetnost, double b, FILE *out, FILE *valOut){
+    double x_values[81];
+    double y_values[81];
 
     double k1 = sqrt(2*m*(curr_E + U0))/hPlank;
-    fprintf(out, "k1:%lf\n", k1);
-    double k2;
+    //fprintf(out, "k1:%lf\n", k1);
+    //double k2;
 
-    //for(int i = 0; i < 51; i++){
-        //x_values[i] = b + i*0.2;
+    for(int i = 0; i < 81; i++){
+        x_values[i] = b + i*0.25;
 
         if(chetnost){
-            /*if(x_values[i] < a/2 && x_values[i] > -a/2){
+            if(x_values[i] < a/2 && x_values[i] > -a/2){
                 y_values[i] = cos(k1*x_values[i]);
             }
             else{
                 if(x_values[i] < -(a/2)){
-                    y_values[i] = coeffitient*(exp((x_values[i])*));
+                    y_values[i] = coeffitient*(exp((x_values[i])*k1*tan(k1*(a/2))));
                 } else if(x_values[i] > (a/2)){
                     y_values[i] = coeffitient*(exp((-x_values[i])*k1*tan(k1*(a/2))));
                 }
-            }*/
-            k2 = k1*tan(k1*(a/2));
-            fprintf(out, "k2:%lf\n", k2);
+            }
+            //k2 = k1*tan(k1*(a/2));
+            //fprintf(out, "k2:%lf\n", k2);
         }
         else{
-            /*if(x_values[i] < a/2 && x_values[i] > -a/2){
+            if(x_values[i] < a/2 && x_values[i] > -a/2){
                 y_values[i] = sin(k1*x_values[i]);
             }
             else{
                 if(x_values[i] < -(a/2)){
                     y_values[i] = -coeffitient*(exp((-x_values[i])*k1*(1.0/tan(k1*(a/2)))));
                 } else if(x_values[i] > (a/2)){
-                    y_values[i] = coeffitient*(exp((x_values[i])*)));
+                    y_values[i] = coeffitient*(exp((x_values[i])*k1*(1.0/tan(k1*(a/2)))));
                 }
-            }*/
-            k2 = -k1*(1.0/tan(k1*(a/2)));
-            fprintf(out, "k2:%lf\n", k2);
+            }
+            //k2 = -k1*(1.0/tan(k1*(a/2)));
+            //fprintf(out, "k2:%lf\n", k2);
         }
 
-        fprintf(out, "B:%lf\n", B);
-        fprintf(out, "C:%lf\n", B*coeffitient);
-    //}
-
-    /*fprintf(out, "Значения функций:\n");
-    if(chetnost){
-        fprintf(out, "Четные функции:\n");
-    } else{
-        fprintf(out, "Нечетные функции:\n");
+        //fprintf(out, "B:%lf\n", B);
+        //fprintf(out, "C:%lf\n", B*coeffitient);
     }
 
-    for(int i = 0; i < 51; i++){
+    fprintf(out, "Значения функций:\n");
+    if(chetnost){
+        fprintf(out, "Четные функции:\n");
+        fprintf(valOut, "Chet func\n");
+    } else{
+        fprintf(out, "Нечетные функции:\n");
+        fprintf(valOut, "Nechet func\n");
+    }
+
+    for(int i = 0; i < 81; i++){
         fprintf(out, "x[%d]:%.2lf\t", i, x_values[i]);
     }
     fprintf(out, "\n");
 
-    for(int i = 0; i < 51; i++){
+    for(int i = 0; i < 81; i++){
         fprintf(out, "y[%d]:%.2lf\t", i, y_values[i]);
-    }*/
+        fprintf(valOut, "%lf\n", y_values[i]);
+    }
     fprintf(out, "\n\n");
+    fprintf(valOut, "\n\n");
 }
 
 int main(){
     FILE *out;
     out = fopen("output.txt", "w");
 
-    if(out == NULL){
+    FILE *valOut;
+    valOut = fopen("valOut.xls", "w");
+
+    if(out == NULL || valOut == NULL){
         printf("Cannot open file!\n");
         return 0;
     }
@@ -123,7 +130,7 @@ int main(){
 
     int count_levels = 0;
 
-    //double b = -5;
+    double b = -10;
     double coeff;
 
     while(e2 < 0){
@@ -133,7 +140,7 @@ int main(){
             if(coeff == FP_NAN || isinf(coeff)){
             } else{
                 fprintf(out,"Четное решение:Interval[%.3f;%.3f]:E = %.5f\n", e1, e2, x);
-                BuildGraph(coeff, x, 1, /*b,*/ out);
+                BuildGraph(coeff, x, 1, b, out, valOut);
                 count_levels++;
             }
         }
@@ -144,7 +151,7 @@ int main(){
             if(coeff == FP_NAN || isinf(coeff)){
             } else{
                 fprintf(out, "Нечетное решение:Interval[%.3f;%.3f]:E = %.5f\n", e1, e2, x);
-                BuildGraph(coeff, x, 0, /*b,*/ out);
+                BuildGraph(coeff, x, 0, b, out, valOut);
                 count_levels++;
             }
         }
