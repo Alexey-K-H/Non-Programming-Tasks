@@ -1,3 +1,5 @@
+package gauss;
+
 import gauss.Algorithm;
 import gauss.LinearSystem;
 import gauss.MyEquation;
